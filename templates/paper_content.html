@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block header_js %}
+    <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/jpage.css">
+    <link rel="stylesheet" href="/static/plugins/morris/morris.css">
+{% endblock %}
+
+{% block head_nav %}
+    <section class="content-header">
+        <h1>&nbsp;</h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home </a></li>
+        </ol>
+    </section>
+{% endblock %}
+{% block content %}
+    <div class="box box-primary box-solid" id="contractBox">
+        <div class="box-body contractInfo">
+            <div class="box-header with-border">
+                <h2>论文题目</h2>
+            </div>
+            <table class="contract" style="margin-left: 10px;margin-top: 10px;width: 100%;font-size: 15px">
+                <tr>
+                    <td>作者：</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>出版日期：</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>INSPEC登录号：</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>打印ISSN：</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>电子ISSN：</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>DOI：</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>出版商：</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>赞助商：</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+            <div class="box-header with-border" style="margin-top: 10px">
+                <h3>关键词</h3>&nbsp;&nbsp;
+                <span></span>
+            </div>
+            <div class="box-header with-border" style="margin-top: 10px">
+                <h3>摘要</h3>&nbsp;&nbsp;
+                <span></span>
+            </div>
+            <div class="box-header with-border" style="margin-top: 10px">
+                <h3>参考文献及引文</h3>&nbsp;&nbsp;
+                <span></span>
+            </div>
+
+            <div class="box-header with-border" style="margin-top: 10px">
+                <h3>被引用次数</h3>&nbsp;&nbsp;
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block footer_js %}
+    <script src="/static/plugins/jquery.blockui.min.js"></script>
+    <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/static/js/metronic.js"></script>
+    <script src="/static/js/table-ext.js"></script>
+    <script src="/static/js/datatable.js"></script>
+    <script src="/static/js/contract/service.js"></script>
+
+    <script>
+        // DataTable展示数据
+        TableExample.init();
+
+    </script>
+    <script>
+        $(function () {
+            // 为每一个textarea绑定事件使其高度自适应
+            $.each($("textarea"), function (i, n) {
+                autoTextarea($(n)[0]);
+            });
+        });
+
+        var autoTextarea = function (elem, extra, maxHeight) {
+            extra = extra || 0;
+            var isFirefox = !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
+                isOpera = !!window.opera && !!window.opera.toString().indexOf('Opera'),
+                addEvent = function (type, callback) {
+                    elem.addEventListener ?
+                        elem.addEventListener(type, callback, false) :
+                        elem.attachEvent('on' + type, callback);
+                },
+                getStyle = elem.currentStyle ?
+                    function (name) {
+                        var val = elem.currentStyle[name];
+                        if (name === 'height' && val.search(/px/i) !== 1) {
+                            var rect = elem.getBoundingClientRect();
+                            return rect.bottom - rect.top -
+                                parseFloat(getStyle('paddingTop')) -
+                                parseFloat(getStyle('paddingBottom')) + 'px';
+                        }
+                        return val;
+                    } : function (name) {
+                        return getComputedStyle(elem, null)[name];
+                    },
+                minHeight = parseFloat(getStyle('height'));
+            elem.style.resize = 'both';//如果不希望使用者可以自由的伸展textarea的高宽可以设置其他值
+
+            var change = function () {
+                var scrollTop, height,
+                    padding = 0,
+                    style = elem.style;
+
+                if (elem._length === elem.value.length) return;
+                elem._length = elem.value.length;
+
+                if (!isFirefox && !isOpera) {
+                    padding = parseInt(getStyle('paddingTop')) + parseInt(getStyle('paddingBottom'));
+                }
+                scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+                elem.style.height = minHeight + 'px';
+                if (elem.scrollHeight > minHeight) {
+                    if (maxHeight && elem.scrollHeight > maxHeight) {
+                        height = maxHeight - padding;
+                        style.overflowY = 'auto';
+                    } else {
+                        height = elem.scrollHeight - padding;
+                        style.overflowY = 'hidden';
+                    }
+                    style.height = height + extra + 'px';
+                    scrollTop += parseInt(style.height) - elem.currHeight;
+                    document.body.scrollTop = scrollTop;
+                    document.documentElement.scrollTop = scrollTop;
+                    elem.currHeight = parseInt(style.height);
+                }
+            };
+            change();
+        };
+    </script>
+{% endblock %}

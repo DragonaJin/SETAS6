@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block header_js %}
+    <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/jpage.css">
+    <link rel="stylesheet" href="/static/plugins/morris/morris.css">
+{% endblock %}
+
+{% block head_nav %}
+    <section class="content-header">
+        <h1>&nbsp;</h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home </a></li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+    <div class="box box-solid box-primary" style="min-height:680px">
+
+        <div class="box-header with-border">
+            <h3 class="box-title" style="">
+                <div class="table-container" style="padding:14px">
+                    <div class="table-actions-wrapper">
+                        <input type="text" class="form-control input-inline input-middle input-sm form-filter"
+                               name="" style="width: 250px" placeholder="关键词">
+
+                        <button class="btn btn-sm red filter-submit"><i class="fa fa-search"></i> 查询</button>
+                    </div>
+                </div>
+            </h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
+
+
+            <div class="box-body" style="font-size: 15px">
+                搜索结果
+            </div>
+            <div class="box-body" style="font-size: 15px">
+                <a href="{% url 'keyword_trend' %}">
+                    软件工程
+                </a>
+            </div>
+
+
+        </div><!-- /.box-body -->
+
+
+    </div>
+    </div>
+
+
+{% endblock %}
+
+{% block footer_js %}
+    <!-- Morris.js charts -->
+    <script src="/static/js/raphael/raphael-min.js"></script>
+    <script src="/static/plugins/morris/morris.min.js"></script>
+
+    <script src="/static/plugins/jquery.blockui.min.js"></script>
+    <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/static/js/metronic.js"></script>
+    <script src="/static/js/table-ext.js"></script>
+    <script src="/static/js/datatable.js"></script>
+    <script src="/static/js/jPages.js"></script>
+{% endblock %}

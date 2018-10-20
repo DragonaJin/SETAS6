@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block header_js %}
+    <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/jpage.css">
+    <link rel="stylesheet" href="/static/plugins/morris/morris.css">
+{% endblock %}
+
+{% block head_nav %}
+    <section class="content-header">
+        <h1>&nbsp;</h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home </a></li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+    <div class="box box-primary box-solid" id="contractBox">
+        <div class="box-body contractInfo">
+            <div class="box-header with-border">
+                <h2>关键词趋势分析</h2>
+            </div>
+            <img src="/static/pic/p2.jpg" style="width: 60%;">
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer_js %}
+    <!-- Morris.js charts -->
+    <script src="/static/js/raphael/raphael-min.js"></script>
+    <script src="/static/plugins/morris/morris.min.js"></script>
+
+    <script src="/static/plugins/jquery.blockui.min.js"></script>
+    <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/static/js/metronic.js"></script>
+    <script src="/static/js/table-ext.js"></script>
+    <script src="/static/js/datatable.js"></script>
+    <script src="/static/js/jPages.js"></script>
+{% endblock %}

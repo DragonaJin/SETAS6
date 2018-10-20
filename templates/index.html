@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block header_js %}
+    <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/jpage.css">
+    <link rel="stylesheet" href="/static/plugins/morris/morris.css">
+{% endblock %}
+
+{% block head_nav %}
+    <section class="content-header">
+        <h1>&nbsp;</h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home </a></li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="box box-solid box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title" style="font-size: 20px">个性化推荐</h3>
+            <div class="box-tools pull-right">
+            </div>
+        </div>
+        <div class="box-body" style="font-size: 15px">
+            <div style="width: 50%;float: left ">
+                题目
+            </div>
+            <div style="width: 30%;float: left">
+                作者
+            </div>
+            <div style="width: 20%;float: left">
+                更新时间
+            </div>
+        </div>
+        <div class="box-body" style="font-size: 15px">
+            <a href="{% url 'to_paper_content' %}">
+                <div style="width: 50%;float: left ">
+                    Machine Learning
+                </div>
+                <div style="width: 30%;float: left">
+                    Panos Louridas ; Christof Ebert
+                </div>
+                <div style="width: 20%;float: left">
+                    24 August 2016
+                </div>
+            </a>
+        </div>
+        <div class="box-body" style="font-size: 15px">
+            <a href="{% url 'to_paper_content' %}">
+                <div style="width: 50%;float: left ">
+                    Blockchain-Enabled E-Voting
+                </div>
+                <div style="width: 30%;float: left">
+                    Nir Kshetri ; Jeffrey Voas
+                </div>
+                <div style="width: 20%;float: left">
+                    06 July 2018
+                </div>
+            </a>
+        </div>
+        <div class="box-body" style="font-size: 15px">
+            <a href="{% url 'to_paper_content' %}">
+                <div style="width: 50%;float: left ">
+                    Choice of Software Development Methodologies: Do Organizational, Project, and Team Characteristics
+                    Matter?
+                </div>
+                <div style="width: 30%;float: left">
+                    Leo R. Vijayasarathy ; Charles W. Butler
+                </div>
+                <div style="width: 20%;float: left">
+                    12 January 2015
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block footer_js %}
+    <!-- Morris.js charts -->
+    <script src="/static/js/raphael/raphael-min.js"></script>
+    <script src="/static/plugins/morris/morris.min.js"></script>
+
+    <script src="/static/plugins/jquery.blockui.min.js"></script>
+    <script src="/static/plugins/datatables/jquery.dataTables.js"></script>
+    <script src="/static/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="/static/js/metronic.js"></script>
+    <script src="/static/js/table-ext.js"></script>
+    <script src="/static/js/datatable.js"></script>
+    <script src="/static/js/jPages.js"></script>
+{% endblock %}

@@ -1,0 +1,80 @@
+Django	1.8	2.1a1
+Jinja2	2.10	2.10
+Markdown	2.6.10	2.6.11
+MarkupSafe	1.0	1.0
+Mastodon.py	1.2.1	1.3.0
+Pillow	4.3.0	5.1.0
+Pygments	2.2.0	2.2.0
+SQLAlchemy	1.2.0	1.2.8
+Werkzeug	0.13	0.14.1
+amqp	1.4.9	2.3.2
+anyjson	0.3.3	0.3.3
+appnope	0.1.0	0.1.0
+billiard	3.3.0.23	3.5.0.3
+bleach	1.5.0	2.1.3
+boost	0.1	0.1
+celery	3.1.23	4.2.0
+certifi	2017.11.5	2018.4.16
+chardet	3.0.4	3.0.4
+click	6.7	6.7
+cmake	0.9.0	3.11.0
+cycler	0.10.0	
+decorator	4.1.2	4.3.0
+django-celery	3.1.17	3.2.2
+django-suit	0.2.25	0.3a3
+dlib	19.9.0	19.13.1
+echarts	0.0.0	0.0.0
+entrypoints	0.2.3	0.2.3
+enum34	1.1.6	1.1.6
+face-recognition-models	0.3.0	
+h5py	2.7.1	2.8.0
+html5lib	0.9999999	1.0.1
+idna	2.6	2.7
+ipykernel	4.7.0	4.8.2
+ipython	5.1.0	6.4.0
+ipython-genutils	0.2.0	
+ipywidgets	7.1.0	7.2.1
+jsonschema	2.6.0	2.6.0
+jupyter	1.0.0	1.0.0
+jupyter-client	5.2.1	
+jupyter-console	5.2.0	
+jupyter-core	4.4.0	
+kombu	3.0.37	4.2.1
+lxml	4.2.1	4.2.1
+matplotlib	2.1.2	2.2.2
+mistune	0.8.3	0.8.3
+nbconvert	5.3.1	5.3.1
+nbformat	4.4.0	4.4.0
+notebook	5.2.2	5.5.0
+numpy	1.13.3	1.14.4
+olefile	0.44	0.45.1
+opencv-python	3.3.1.11	3.4.1.15
+pandas	0.22.0	0.23.0
+pandocfilters	1.4.2	1.4.2
+peppercorn	0.5	0.5
+pexpect	4.3.1	4.6.0
+pickleshare	0.7.4	0.7.4
+pip	9.0.3	10.0.1
+prompt-toolkit	1.0.15	
+protobuf	3.5.0.post1	3.5.2.post1
+ptyprocess	0.5.2	0.5.2
+pycrypto	2.6.1	2.6.1
+pyparsing	2.2.0	2.2.0
+python-dateutil	2.6.1	2.7.3
+pytz	2017.3	2018.4
+pyzmq	16.0.3	17.0.0
+qtconsole	4.3.1	4.3.1
+requests	2.18.4	2.18.4
+scipy	1.0.0	1.1.0
+setuptools	38.2.4	39.2.0
+simplegeneric	0.8.1	0.8.1
+six	1.11.0	1.11.0
+spyne	2.12.14	2.13.2a0
+suds-jurko	0.6	0.6
+tensorflow	1.4.1	1.9.0rc0
+tensorflow-tensorboard	0.4.0rc3	1.5.1
+terminado	0.8.1	0.8.1
+testpath	0.3.1	0.3.1
+tflearn	0.3.2	0.3.2
+tornado	4.5.2	5.0.2
+traitlets	4.3.2	4.3.2
