@@ -4,9 +4,12 @@ from webapp import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^index/$', views.index, {"template_name": "index.html"}, name="index"),
+    url(r'^$', views.quit, {"template_name": "index.html"}, name=""),
+    url(r'^index/(?P<account>\w+)/$', views.index, {"template_name": "index.html"}, name="index"),
+    url(r'^login/$', views.login, name="login"),
+    url(r'^register/$', views.register, name="register"),
     url(r'^search/paper/$', views.goto, {"template_name": "search_paper.html"}, name="to_search_paper"),
-    url(r'^paper/content/$', views.goto, {"template_name": "paper_content.html"}, name="to_paper_content"),
+    url(r'^paper/detail/(?P<paperId>\w+)/(?P<account>\w+)/$', views.detail, {"template_name": "paper_content.html"}, name="to_paper_content"),
     url(r'^keyword/history/$', views.goto, {"template_name": "keyword_history.html"}, name="to_keyword_history"),
     url(r'^keyword/search/$', views.goto, {"template_name": "search_keyword.html"}, name="to_keyword_search"),
     url(r'^auther/search/$', views.goto, {"template_name": "search_auther.html"}, name="to_search_auther"),

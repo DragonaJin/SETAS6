@@ -19,41 +19,50 @@
     <div class="box box-primary box-solid" id="contractBox">
         <div class="box-body contractInfo">
             <div class="box-header with-border">
-                <h2>论文题目</h2>
+{#                {% for info in paperInfo %}#}
+                <h2>{{ paperInfo.paper_title }}</h2>
+{#                {% endfor %}#}
             </div>
             <table class="contract" style="margin-left: 10px;margin-top: 10px;width: 100%;font-size: 15px">
                 <tr>
+                    <td>出版日期：</td>
+                    <td>{{ paperInfo.paper_pubDate }}</td>
+                    <td>DOI：</td>
+                    <td>{{ paperInfo.doi_number }}</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>&nbsp;&nbsp;</td>
+                    <td>&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+
                     <td>作者：</td>
                     <td>&nbsp;&nbsp;</td>
-                    <td>出版日期：</td>
-                    <td>&nbsp;</td>
+
+                </tr>
+                {% for author in authorList %}
+                <tr>
+                    <td>name:</td><td>{{ author.author_name }},&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ author.author_from }}</td>
                 </tr>
                 <tr>
-                    <td>INSPEC登录号：</td>
-                    <td>&nbsp;&nbsp;</td>
-                    <td>打印ISSN：</td>
-                    <td>&nbsp;</td>
+                    <td>introduction:</td>
                 </tr>
                 <tr>
-                    <td>电子ISSN：</td>
                     <td>&nbsp;&nbsp;</td>
-                    <td>DOI：</td>
-                    <td>&nbsp;</td>
+                    <td>{{ author.author_introduction }}</td>
                 </tr>
-                <tr>
-                    <td>出版商：</td>
-                    <td>&nbsp;&nbsp;</td>
-                    <td>赞助商：</td>
-                    <td>&nbsp;</td>
-                </tr>
+                {% endfor %}
             </table>
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>关键词</h3>&nbsp;&nbsp;
-                <span></span>
+                {% for key in keyList %}
+                <span>{{ key.kTop_keyword }}; </span>
+                {% endfor %}
             </div>
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>摘要</h3>&nbsp;&nbsp;
-                <span></span>
+                <span>{{ paperInfo.paper_abstract }}</span>
             </div>
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>参考文献及引文</h3>&nbsp;&nbsp;

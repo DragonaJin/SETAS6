@@ -52,7 +52,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'SETAS.urls'
 
 
-# AUTH_USER_MODEL = 'webapp.UserProfile'
 
 
 TEMPLATES = [
@@ -74,19 +73,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SETAS.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sedatabase',
+        'NAME': 'software',
         'USER': 'root',
-        'PASSWORD': '18911912812pyy',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
