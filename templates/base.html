@@ -142,8 +142,8 @@
                 <ul class="nav navbar-nav">
 {#                    {% if account %}#}
                     {% if request.session.username %}
-                    <li><a data-toggle="modal" href="#login">{{ request.session.username }} <i class="fa fa-sign-in"></i></a></li>
-                        <li><a href="/">退出 <i class="fa fa-sign-out"></i></a></li>
+                    <li><a data-toggle="modal" >{{ request.session.username }} <i class="fa fa-sign-in"></i></a></li>
+                        <li><a href="/logout/">退出 <i class="fa fa-sign-out"></i></a></li>
                     {% endif %}
                 {% if not request.session.username %}
                     <li><a data-toggle="modal" href="#login">登陆 <i class="fa fa-sign-in"></i></a></li>
@@ -174,7 +174,7 @@
             </div>
             <ul class="sidebar-menu" style="margin-top:23px" id="nav">
                 <li class="treeview" id="nav-search">
-                    <a href="{% url 'to_search_paper' %}">
+                    <a href="/search/paper/">
                         <i class="fa fa-circle-o"></i><span>搜索</span>
                         <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span>
                     </a>
@@ -214,14 +214,11 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         {% block head_nav %}
-            <section class="content-header">
-                <h1>
-                    Dashboard
-                    <small>Control panel</small>
-                </h1>
+            <section class="content-header" style="height: 30px">
+
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-                    <li class="active">Dashboard</li>
+                    <li><a href="/index/"><i class="fa fa-dashboard"></i> 首页</a></li>
+                    <li></li>>
                 </ol>
             </section>
         {% endblock %}
@@ -308,10 +305,10 @@
         var account = $("#log_account").val();
         $("#loginForm").ajaxForm({
             type: "post",
-            url: "login/",    //提交到的url
+            url: "/login/",    //提交到的url
             success: function (data) {
                 if (data.success) {
-                    location.href = "/index/"+account +"/";
+                    location.href = "/index/";
                 } else {
                     $.growlService("用户不存在或密码错误！", {type: "danger"})
                 }
@@ -324,10 +321,11 @@
         var account = $("#re_account").val();
         $("#registerForm").ajaxForm({
             type: "post",
-            url: "register/",    //提交到的url
+            url: "/register/",    //提交到的url
             success: function (data) {
                 if (data.success) {
-                    location.href = "/index/"+account +"/";
+                    alert("注册成功")
+                    location.href = "";
                 } else {
                     $.growlService("用户不存在或密码错误！", {type: "danger"})
                 }

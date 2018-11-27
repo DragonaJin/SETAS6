@@ -7,14 +7,7 @@
     <link rel="stylesheet" href="/static/plugins/morris/morris.css">
 {% endblock %}
 
-{% block head_nav %}
-    <section class="content-header">
-        <h1>&nbsp;</h1>
-        <ol class="breadcrumb">
-            <li><a href="/"><i class="fa fa-dashboard"></i> Home </a></li>
-        </ol>
-    </section>
-{% endblock %}
+
 
 {% block content %}
 
@@ -24,16 +17,22 @@
             <h3 class="box-title" style="">
                 <div class="table-container" style="padding:14px">
                     <div class="table-actions-wrapper">
-                        <input type="text" class="form-control input-inline input-middle input-sm form-filter"
-                               name="" style="width: 250px" placeholder="查询内容">
-                        <select class="form-control input-inline input-small input-sm form-filter select" name=""
-                                data-placeholder='查询类型'>
-                            <option value="">按论文题目</option>
-                            <option value="">按作者</option>
-                            <option value="">按关键字</option>
-                            <option value="">按起止时间</option>
-                        </select>
-                        <button class="btn btn-sm red filter-submit"><i class="fa fa-search"></i> 查询</button>
+                        <form id="searchForm" class="form-horizontal" enctype="multipart/form-data"
+                              method="post" action="/search/paper/">
+                            {% csrf_token %}
+                            <input type="text" class="form-control input-inline input-middle input-sm form-filter"
+                                   name="search_content" style="width: 250px" placeholder="查询内容">
+                            <select class="form-control input-inline input-small input-sm form-filter select"
+                                    name="search_type"
+                                    data-placeholder='查询类型'>
+                                <option value="title">按论文题目</option>
+                                <option value="author">按作者</option>
+                                <option value="keyword">按关键字</option>
+                            </select>
+                            <button class="btn btn-sm red filter-submit" type="submit" id="search_submit"><i
+                                    class="fa fa-search"></i> 查询
+                            </button>
+                        </form>
                     </div>
                 </div>
             </h3>
@@ -52,25 +51,26 @@
                     更新时间
                 </div>
             </div>
-            <div class="box-body" style="font-size: 15px">
-{#                <a href="{% url 'to_paper_content' %}">#}
-                    <div style="width: 50%;float: left ">
-                        Machine Learning
-                    </div>
-                    <div style="width: 30%;float: left">
-                        Panos Louridas ; Christof Ebert
-                    </div>
-                    <div style="width: 20%;float: left">
-                        24 August 2016
-                    </div>
-{#                </a>#}
-            </div>
+            {% for paper,name in made %}
+                <div class="box-body" style="font-size: 15px">
+                    <a href="/paper/detail/{{ paper.pid }}/">
+                        <div style="width: 50%;float: left ">
+                            {{ paper.paper_title }}
+                        </div>
+                        <div style="width: 30%;float: left">
+                            {{ name }}
+                        </div>
+                        <div style="width: 20%;float: left">
+                            {{ paper.paper_pubDate }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
 
 
         </div><!-- /.box-body -->
 
 
-    </div>
     </div>
 
 
@@ -88,4 +88,5 @@
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
     <script src="/static/js/jPages.js"></script>
+
 {% endblock %}

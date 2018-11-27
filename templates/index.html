@@ -7,14 +7,7 @@
     <link rel="stylesheet" href="/static/plugins/morris/morris.css">
 {% endblock %}
 
-{% block head_nav %}
-    <section class="content-header">
-        <h1>&nbsp;</h1>
-        <ol class="breadcrumb">
-            <li><a href=""><i class="fa fa-dashboard"></i> Home </a></li>
-        </ol>
-    </section>
-{% endblock %}
+
 
 {% block content %}
 
@@ -40,7 +33,7 @@
 
         {% for paper,name in made  %}
         <div class="box-body" style="font-size: 15px">
-            <a href="/paper/detail/{{ paper.pid }}/{{ account }}/">
+            <a href="/paper/detail/{{ paper.pid }}/">
                 <div style="width: 50%;float: left ">
                     {{ paper.paper_title }}
                 </div>
