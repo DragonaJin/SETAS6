@@ -17,10 +17,14 @@
             <h3 class="box-title" style="">
                 <div class="table-container" style="padding:14px">
                     <div class="table-actions-wrapper">
-                        <input type="text" class="form-control input-inline input-middle input-sm form-filter"
-                               name="" style="width: 250px" placeholder="作者名字">
+                        <form id="searchForm" class="form-horizontal" enctype="multipart/form-data"
+                              method="post" action="/auther/search/">
+                            {% csrf_token %}
+                            <input type="text" class="form-control input-inline input-middle input-sm form-filter"
+                               name="author_name" style="width: 250px" placeholder="作者名字">
 
-                        <button class="btn btn-sm red filter-submit"><i class="fa fa-search"></i> 查询</button>
+                            <button class="btn btn-sm red filter-submit"><i class="fa fa-search"></i> 查询</button>
+                        </form>
                     </div>
                 </div>
             </h3>
@@ -32,8 +36,8 @@
                 搜索结果
             </div>
             <div class="box-body" style="font-size: 15px">
-                <a href="{% url 'to_auther_content' %}">
-                    张三
+                <a href="/auther/content/{{ author.id }}/">
+                    {{ author.author_name }}
                 </a>
             </div>
 
@@ -59,4 +63,5 @@
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
     <script src="/static/js/jPages.js"></script>
+
 {% endblock %}

@@ -135,11 +135,72 @@ def search(request, template_name):
             authors += ";"
         names.append(authors)
 
-    return_dict["papers"]=papers
+    return_dict["papers"] = papers
     return_dict["names"] = names
     return_dict["made"] = zip(papers, names)
     return render(request, template_name, return_dict)
 
+
+def searchAuthor(request, template_name):
+    return_dict = {}
+    if request.method != "POST":
+        return render(request, template_name, return_dict)
+    author_name = request.POST.get("author_name")
+    print(author_name)
+    authors = Author.objects.get(author_name=author_name)
+    return_dict["author"] = authors
+    return render(request, template_name, return_dict)
+
+
+def authorContent(request, template_name, authorId):
+    print(authorId)
+    return_dict = {}
+    author = Author.objects.get(id=authorId)
+    return_dict["author"] = author
+    his_papers = AtoP.objects.filter(aTop_author_id=authorId)
+    his_papers = his_papers.order_by('aTop_paper__paper_pubDate')
+
+    partners = {}
+    names = []
+    collaborate = []
+    years = {}
+    for paper in his_papers:
+        print(paper.aTop_paper.paper_pubDate.year)
+        if paper.aTop_paper.paper_pubDate.year not in years.keys():
+            years[paper.aTop_paper.paper_pubDate.year] = 1
+        else:
+            years[paper.aTop_paper.paper_pubDate.year] += 1
+        his_partners = AtoP.objects.filter(aTop_paper_id=paper.aTop_paper_id)
+        for his_partner in his_partners:
+            pName = Author.objects.get(id=his_partner.aTop_author_id)
+
+            if pName.author_name in partners.keys():
+                partners[pName.author_name] += 1
+            else:
+                if author.author_name != pName.author_name:
+                    names.append(pName.author_name)
+                partners[pName.author_name] = 1
+    print(years)
+    year = list(years.keys())
+    num = list(years.values())
+    print(year)
+    print(num)
+    return_dict["year"] = json.dumps(year)
+    return_dict["num"] = json.dumps(num)
+    print(partners)
+    print(len(names))
+    achievements = partners[author.author_name]
+    for name, value in partners.items():
+        if name == author.author_name:
+            continue
+        print(name)
+        collaborate.append(value)
+    print(names)
+    print(collaborate)
+    return_dict['achievements'] = achievements
+    return_dict['names'] = json.dumps(names)
+    return_dict['collaborate'] = json.dumps(collaborate)
+    return render(request, template_name, return_dict)
 
 
 def login(request):
@@ -167,6 +228,8 @@ def register(request):
         user.save()
         request.session['username'] = account
         return ajax_success()
+
+
 def quit(request):
     del request.session['username']
     return HttpResponseRedirect("/index/")

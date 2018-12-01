@@ -56,7 +56,7 @@ def string_date(date_s):
     return date_d
 
 
-def save_author(row):
+def save_author(row, pid):
     # 存作者
     author_row = row['authors']    # a1,单位---简介***a2,单位---简介***a3,单位---简介***
     if author_row and author_row == author_row:
@@ -75,22 +75,30 @@ def save_author(row):
                 if person_list[1]:  # 作者简介缺失
                     intro = person_list[1].strip()
 
-                sql = """INSERT INTO webapp_author(author_introduction, author_name, author_from)
-                            VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE 
-                            author_introduction = VALUES(author_introduction),
-                            author_name = VALUES(author_name),
-                            author_from = VALUES(author_from)"""
+                sql = """SELECT id FROM webapp_author WHERE author_name = %s"""
+                cursor.execute(sql, name)
                 try:
-                    cursor.execute(sql, (intro, name, a_from))
-                    db.commit()
-                    sql = """SELECT id FROM webapp_author WHERE author_name = %s"""
-                    cursor.execute(sql, (name))
                     aid = cursor.fetchone()[0]
-                    return aid
+                    save_atop(aid, pid)
                 except Exception:
-                    print(row['id'])
-                    traceback.print_exc()
-                    db.rollback()
+                    sql = """INSERT INTO webapp_author(author_introduction, author_name, author_from)
+                                VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE 
+                                author_introduction = VALUES(author_introduction),
+                                author_name = VALUES(author_name),
+                                author_from = VALUES(author_from)"""
+                    try:
+                        cursor.execute(sql, (intro, name, a_from))
+                        db.commit()
+                        sql = """SELECT id FROM webapp_author WHERE author_name = %s"""
+                        cursor.execute(sql, (name))
+                        aid = cursor.fetchone()[0]
+                        save_atop(aid, pid)
+                    except Exception:
+                        print(row['id'])
+                        traceback.print_exc()
+                        db.rollback()
+
+
 
 
 def save_key(row, pid):
@@ -198,9 +206,9 @@ def save_ptop(row, pid):
                         db.rollback()
 
 
-df = pd.DataFrame(pd.read_excel("/Volumes/pyy/研究生/软件工程/数据/dataSet2.0.xlsx"))
+df = pd.DataFrame(pd.read_excel("E:\航天二院\软件工程\dataSet2.0.xlsx"))
 
-db = pymysql.connect("localhost", "root", "18911912812pyy", "sedb")
+db = pymysql.connect("localhost", "root", "", "software")
 
 cursor = db.cursor()
 
@@ -210,8 +218,7 @@ for index, row in df.iterrows():
         if pid:
             save_key(row, pid)
             if row['authors'] and row['authors'] == row['authors']:
-                aid = save_author(row)
-                save_atop(aid, pid)
+                save_author(row, pid)
         else:
             print(row['id']+"pid有误")
         # pid = row['id'][10:-1]

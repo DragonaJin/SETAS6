@@ -12,32 +12,37 @@
     <div class="box box-primary box-solid" id="contractBox">
         <div class="box-body contractInfo">
             <div class="box-header with-border">
-                <h2>作者姓名</h2>
+                <h2>{{ author.author_name }}</h2>
+
             </div>
             <table class="contract" style="margin-left: 10px;margin-top: 10px;width: 100%;font-size: 15px">
                 <tr>
                     <td>来自：</td>
                     <td>&nbsp;&nbsp;</td>
+                    <td>{{ author.author_from }}</td>
                 </tr>
             </table>
 
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>作者简介</h3>&nbsp;&nbsp;
-                <span></span>
+                <span>{{ author.author_introduction }}</span>
             </div>
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>学者生涯研究轨迹分析</h3>&nbsp;&nbsp;
-                <span>
-                    <img src="/static/pic/p3.jpg" style="width: 60%;">
-                </span>
+                <div class="box-body" id="author_trace"  style="height: 350px; padding: 0"></div>
             </div>
+            <input id="years" value="{{ year }}" style="display: none">
+            <input id="nums" value="{{ num }}" style="display: none">
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>作者关系图</h3>&nbsp;&nbsp;
-                <span>
-                    <img src="/static/pic/p4.jpg" style="width: 60%;">
-                </span>
+                <div class="box-body" id="author_graph"  style="height: 450px; padding: 0">
+{#                    <div id="main"  style="height: 300px; padding: 0"></div>#}
+                </div>
             </div>
-
+            <input id="authorName" value="{{ author.author_name }}" style="display: none">
+            <input id="achievements" value="{{ achievements }}" style="display: none">
+            <input id="names" value="{{ names }}" style="display: none">
+            <input id="collaborate" value="{{ collaborate }}" style="display: none">
 
         </div>
     </div>
@@ -52,76 +57,142 @@
     <script src="/static/js/metronic.js"></script>
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
-    <script src="/static/js/contract/service.js"></script>
+{#    <script src="/static/js/contract/service.js"></script>#}
 
-    <script>
-        // DataTable展示数据
-        TableExample.init();
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/echarts.js"></script>
+{#    <style type="text/css">#}
+{#        html, body, #main { height: 100%; width: 100%; margin: 0; padding: 0 }#}
+{#    </style>#}
 
-    </script>
-    <script>
-        $(function () {
-            // 为每一个textarea绑定事件使其高度自适应
-            $.each($("textarea"), function (i, n) {
-                autoTextarea($(n)[0]);
-            });
-        });
 
-        var autoTextarea = function (elem, extra, maxHeight) {
-            extra = extra || 0;
-            var isFirefox = !!document.getBoxObjectFor || 'mozInnerScreenX' in window,
-                    isOpera = !!window.opera && !!window.opera.toString().indexOf('Opera'),
-                    addEvent = function (type, callback) {
-                        elem.addEventListener ?
-                                elem.addEventListener(type, callback, false) :
-                                elem.attachEvent('on' + type, callback);
-                    },
-                    getStyle = elem.currentStyle ?
-                            function (name) {
-                                var val = elem.currentStyle[name];
-                                if (name === 'height' && val.search(/px/i) !== 1) {
-                                    var rect = elem.getBoundingClientRect();
-                                    return rect.bottom - rect.top -
-                                            parseFloat(getStyle('paddingTop')) -
-                                            parseFloat(getStyle('paddingBottom')) + 'px';
-                                }
-                                return val;
-                            } : function (name) {
-                        return getComputedStyle(elem, null)[name];
-                    },
-                    minHeight = parseFloat(getStyle('height'));
-            elem.style.resize = 'both';//如果不希望使用者可以自由的伸展textarea的高宽可以设置其他值
+    <script type="text/javascript">
+        var years = $("#years").val();
+        var nums = $("#nums").val();
+        years =  JSON.parse(years);
+        nums = JSON.parse(nums);
 
-            var change = function () {
-                var scrollTop, height,
-                        padding = 0,
-                        style = elem.style;
+        var authorName = $("#authorName").val();
 
-                if (elem._length === elem.value.length) return;
-                elem._length = elem.value.length;
+        var achievements = $("#achievements").val();
+        var str = "共发表"; str += achievements; str += "篇论文";
+        var names = $("#names").val();
+        names = JSON.parse(names);
+        var collaborate = $("#collaborate").val();
+        collaborate  = JSON.parse(collaborate);
 
-                if (!isFirefox && !isOpera) {
-                    padding = parseInt(getStyle('paddingTop')) + parseInt(getStyle('paddingBottom'));
-                }
-                scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+        var myChart = echarts.init(document.getElementById('author_graph'));
+        var trace = echarts.init(document.getElementById('author_trace'));
 
-                elem.style.height = minHeight + 'px';
-                if (elem.scrollHeight > minHeight) {
-                    if (maxHeight && elem.scrollHeight > maxHeight) {
-                        height = maxHeight - padding;
-                        style.overflowY = 'auto';
-                    } else {
-                        height = elem.scrollHeight - padding;
-                        style.overflowY = 'hidden';
-                    }
-                    style.height = height + extra + 'px';
-                    scrollTop += parseInt(style.height) - elem.currHeight;
-                    document.body.scrollTop = scrollTop;
-                    document.documentElement.scrollTop = scrollTop;
-                    elem.currHeight = parseInt(style.height);
-                }
-            };
-            change();
+        traceOption = {
+            tooltip: {},
+            legend: {
+                data:['成果数']
+            },
+            xAxis: {
+                data: years
+            },
+            yAxis: {},
+            series: [{
+                name: '成果数',
+                type: 'bar',
+                data: nums
+            }]
         };
+        option = {
+
+            tooltip: {
+                formatter: function (x) {
+                    return x.data.des;
+                }
+            },
+            series: [
+                {
+                    type: 'graph',
+                    layout: 'force',
+                    symbolSize: 80,
+                    roam: true,
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    edgeLabel: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 20
+                            }
+                        }
+                    },
+                    force: {
+                        repulsion: 2500,
+                        edgeLength: [10, 50]
+                    },
+                    draggable: true,
+                    itemStyle: {
+                        normal: {
+                            color: '#4b565b'
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            width: 2,
+                            color: '#4b565b'
+
+                        }
+                    },
+                    edgeLabel: {
+                        normal: {
+                            show: true,
+                            formatter: function (x) {
+                                return x.data.name;
+                            }
+                        }
+                    },
+                    label: {
+                        normal: {
+                            show: true,
+                            textStyle: {
+                            }
+                        }
+                    },
+                    data: [
+                         {
+                            name: authorName,
+                            des: str,
+	                        symbolSize: 100	,
+                            itemStyle: {
+                                normal: {
+                                    color: 'red'
+                                }
+                            }
+                        }
+                    ],
+                    links: [{
+                            source: names,
+                            target: authorName,
+                            name:"合作"
+                        }]
+                }
+            ]
+        };
+        for(var i=0; i<names.length; i++) {
+            if (authorName == names[i])
+                continue;
+            else {
+                var str2 = "合作次数：";
+                str2 += collaborate[i];
+                option.series[0].data.push({
+                    name: names[i],
+                    des: str2
+                });
+                option.series[0].links.push({
+                    source: names[i],
+                    target: authorName,
+                    name:"合作"
+                });
+
+            }
+        }
+        myChart.setOption(option);
+        trace.setOption(traceOption);
     </script>
+
 {% endblock %}
