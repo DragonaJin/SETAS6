@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 
 from django.http import Http404
@@ -165,9 +166,10 @@ def authorContent(request, template_name, authorId):
     collaborate = []
     years = {}
     for paper in his_papers:
-        print(paper.aTop_paper.paper_pubDate.year)
+
         if paper.aTop_paper.paper_pubDate.year not in years.keys():
             years[paper.aTop_paper.paper_pubDate.year] = 1
+            print(paper.aTop_paper.paper_pubDate.year)
         else:
             years[paper.aTop_paper.paper_pubDate.year] += 1
         his_partners = AtoP.objects.filter(aTop_paper_id=paper.aTop_paper_id)
@@ -185,6 +187,21 @@ def authorContent(request, template_name, authorId):
     num = list(years.values())
     print(year)
     print(num)
+    professor = []
+    for i in range(len(year)):
+        high = {}
+        majors = his_papers.filter(aTop_paper__paper_pubDate__year=year[i])
+        for major in majors:
+            keywords = KtoP.objects.filter(kTop_paper_id=major.aTop_paper_id)
+            for keyword in keywords:
+                if keyword.kTop_keyword not in high.keys():
+                    high[keyword.kTop_keyword] = 1
+                else:
+                    high[keyword.kTop_keyword] += 1
+        # professor.append(max(high, key=high.get))
+        professor.append(str(year[i]) +'\n'+ max(high, key=high.get))
+    print(professor)
+    return_dict['professor'] = json.dumps(professor)
     return_dict["year"] = json.dumps(year)
     return_dict["num"] = json.dumps(num)
     print(partners)
@@ -233,3 +250,95 @@ def register(request):
 def quit(request):
     del request.session['username']
     return HttpResponseRedirect("/index/")
+
+
+def search_keyword(request, template_name):
+    return_dict = {}
+    if request.method != "POST":
+        return render(request, template_name, return_dict)
+    keyword = request.POST.get("keyword")
+    try:
+        ktops = KtoP.objects.filter(kTop_keyword__icontains=keyword)
+        k = [ktop.kTop_keyword.lower() for ktop in ktops]
+        k2 = list(set(k))
+        keyword_count = []
+        for i in range(len(k2)):
+            keyword_count.append({"key": k2[i], "count": k.count(k2[i])})
+        return_dict["keywords"] = keyword_count
+    except Exception as e:
+        print(e)
+    return render(request, template_name, return_dict)
+
+
+def keyword_trend(request, template_name, keyword):
+    # url匹配中不能出现空格、+、=
+    keyword = keyword.replace('_', ' ')
+    return_dict = {"keyword": keyword}
+
+    ktops = KtoP.objects.filter(kTop_keyword__iexact=keyword)
+    papers = Paper.objects.filter(pid__in=ktops.values('kTop_paper_id')).order_by("paper_pubDate")
+    first = papers[0].paper_pubDate.year
+    last = papers[len(papers)-1].paper_pubDate.year
+    num = []
+    year_range = []
+    if last-first > 7:
+        r = 6
+        t = int((last - first) / 6)
+    else:
+        r = last-first
+        t = 1
+
+    for i in range(r):
+        start = datetime.strptime(str(first+t*i), '%Y').date()
+        end = datetime.strptime(str(first+t*(i+1)), '%Y').date()
+        papers_between = papers.filter(paper_pubDate__gte=start, paper_pubDate__lt=end)
+        num.append(len(papers_between))
+        year_range.append(str(first+t*i)+'-'+str(first+t*(i+1)-1))
+
+    start = datetime.strptime(str(first + t * r), '%Y').date()
+    end = datetime.strptime(str(last)+"-12-31", '%Y-%m-%d').date()
+    papers_between = papers.filter(paper_pubDate__gte=start, paper_pubDate__lte=end)
+    num.append(len(papers_between))
+    year_range.append(str(first+t*r)+'-'+str(last))
+
+    print(num)
+    print(year_range)
+    return_dict["num"] = json.dumps(num)
+    return_dict["year_range"] = json.dumps(year_range)
+
+    return render(request, template_name, return_dict)
+
+
+def keyword_history(request, template_name):
+    t = 7
+    begin_time = datetime.strptime('1984', '%Y')
+    year = 1984
+    max_key = []  # type: List[Any]
+    max_key_num = []  # type: List[int]
+    return_dict = {}  # type: Dict[str, str]
+    for i in range(t):
+        """取五年的papers，取到pid，然后对应Keyword"""
+        print(begin_time)
+        next_time = begin_time + timedelta(days=1800)#顶部添加新声明timedelta
+        papers_between = Paper.objects.filter(paper_pubDate__gte=begin_time, paper_pubDate__lt=next_time)
+        Papers = KtoP.objects.filter(kTop_paper_id__in=papers_between.values('pid'))
+        Keyword = Papers.values('kTop_keyword')
+        begin_time = begin_time + timedelta(days=1800)
+        # print(Keyword)
+        # print(next_time)
+        Keyword_num = {}
+        #创建新字典并排序
+        for KEY in Keyword:
+          if KEY['kTop_keyword'] not in Keyword_num.keys():
+              Keyword_num[KEY['kTop_keyword']] = 1
+          else:Keyword_num[KEY['kTop_keyword']] += 1
+        # print(Keyword_num)
+        max_key1 = max(Keyword_num, key=Keyword_num.get)#出现次数最多的关键词
+        max_key_num.append(Keyword_num[max_key1])#出现次数
+        max_key.append(str(year)+'-'+str(year+5)+'\n'+max_key1)
+        year += 5
+        print(max_key1, max_key_num, max_key)
+
+    return_dict["max_key"] = json.dumps(max_key)
+    return_dict["max_key_num"] = json.dumps(max_key_num)
+    return render(request, template_name, return_dict)

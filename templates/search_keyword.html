@@ -17,31 +17,45 @@
             <h3 class="box-title" style="">
                 <div class="table-container" style="padding:14px">
                     <div class="table-actions-wrapper">
-                        <input type="text" class="form-control input-inline input-middle input-sm form-filter"
-                               name="" style="width: 250px" placeholder="关键词">
+                        <form id="searchForm2" class="form-horizontal" enctype="multipart/form-data"
+                              method="post" action="/search/keyword/">
+                            {% csrf_token %}
+                            <input type="text" class="form-control input-inline input-middle input-sm form-filter"
+                                   name="keyword" style="width: 250px" placeholder="关键词">
 
-                        <button class="btn btn-sm red filter-submit"><i class="fa fa-search"></i> 查询</button>
+                            <button class="btn btn-sm red filter-submit" type="submit"><i class="fa fa-search"></i> 查询
+                            </button>
+                        </form>
                     </div>
                 </div>
             </h3>
         </div><!-- /.box-header -->
         <div class="box-body">
-
-
             <div class="box-body" style="font-size: 15px">
                 搜索结果
             </div>
-            <div class="box-body" style="font-size: 15px">
-                <a href="{% url 'keyword_trend' %}">
-                    软件工程
-                </a>
+            <div style="width: 50%;float: left ">
+                关键词
             </div>
-
+            <div style="width: 30%;float: left">
+                出现次数
+            </div>
+            {% for k in keywords %}
+                <div class="box-body" style="font-size: 15px">
+                    <a href="javascript:void(0)" onclick='keyword("{{ k.key }}")'>
+                        <div style="width: 50%;float: left ">
+                            {{ k.key }}
+                        </div>
+                        <div style="width: 50%;float: left ">
+                            {{ k.count }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
 
         </div><!-- /.box-body -->
 
 
-    </div>
     </div>
 
 
@@ -59,4 +73,11 @@
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
     <script src="/static/js/jPages.js"></script>
+    <script type="text/javascript">
+        function keyword(key) {
+            key = key.replace(/ /g,'_');
+            location.href = "/keyword/trend/"+key;
+        }
+    </script>
+
 {% endblock %}

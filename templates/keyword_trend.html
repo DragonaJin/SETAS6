@@ -14,22 +14,16 @@
     <div class="box box-primary box-solid" id="contractBox">
         <div class="box-body contractInfo">
             <div class="box-header with-border">
-                <h2>关键词趋势分析</h2>
+                <h3>关键词趋势分析——{{ keyword }}</h3>
             </div>
-            <img src="/static/pic/p2.jpg" style="width: 60%;">
+            <div class="box-body">
+                <div style="height: 300px; padding: 0" id="key_chart"></div>
+            </div>
 
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
+    <input id="num" value="{{ num }}" style="display: none">
+    <input id="year_range" value="{{ year_range }}" style="display: none">
 
 {% endblock %}
 
@@ -45,4 +39,74 @@
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
     <script src="/static/js/jPages.js"></script>
+    <script src="/static/js/echarts.min.js" charset="utf-8" type="text/javascript"></script>
+
+
+    <script>
+        var num = $("#num").val();
+        var year_range = $("#year_range").val();
+        num = JSON.parse(num);
+        year_range = JSON.parse(year_range);
+        showchart('key_chart', num, year_range);   //图表执行
+
+        function showchart(id, num, year_range) {
+            var myChart = echarts.init(document.getElementById(id));
+            option = {
+                title: {
+                    text: '关键词在各时段出现频率',
+                    subtext: '（相关文章数量）'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: year_range
+
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        type: 'line',
+                        data: num,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+    </script>
+
 {% endblock %}

@@ -12,6 +12,7 @@
     <div class="box box-primary box-solid" id="contractBox">
         <div class="box-body contractInfo">
             <div class="box-header with-border">
+                <h1>学者详情</h1>
                 <h2>{{ author.author_name }}</h2>
 
             </div>
@@ -33,6 +34,7 @@
             </div>
             <input id="years" value="{{ year }}" style="display: none">
             <input id="nums" value="{{ num }}" style="display: none">
+            <input id="professors" value="{{ professor }}" style="display: none">
             <div class="box-header with-border" style="margin-top: 10px">
                 <h3>作者关系图</h3>&nbsp;&nbsp;
                 <div class="box-body" id="author_graph"  style="height: 450px; padding: 0">
@@ -69,8 +71,11 @@
     <script type="text/javascript">
         var years = $("#years").val();
         var nums = $("#nums").val();
+        var professors = $("#professors").val();
         years =  JSON.parse(years);
         nums = JSON.parse(nums);
+        professors = JSON.parse(professors);
+        console.log(professors);
 
         var authorName = $("#authorName").val();
 
@@ -90,13 +95,28 @@
                 data:['成果数']
             },
             xAxis: {
-                data: years
+                data: professors
             },
             yAxis: {},
             series: [{
                 name: '成果数',
                 type: 'bar',
-                data: nums
+                data: nums,
+                label:{
+
+                    normal:{
+
+                        show: true,
+                        formatter: function (params) {
+                            console.log(params.name);
+                        },
+                        position: 'inside',
+                        distance: {
+                            min: 0,
+                            max: 100
+                        }
+                    }
+                }
             }]
         };
         option = {
@@ -128,7 +148,8 @@
                     draggable: true,
                     itemStyle: {
                         normal: {
-                            color: '#4b565b'
+                            {#color: '#4b565b'#}
+                            color:'green'
                         }
                     },
                     lineStyle: {
@@ -137,6 +158,9 @@
                             color: '#4b565b'
 
                         }
+                    }, linkStyle: {
+                        color: 'source',
+                        curveness: 0.1
                     },
                     edgeLabel: {
                         normal: {
@@ -181,12 +205,19 @@
                 str2 += collaborate[i];
                 option.series[0].data.push({
                     name: names[i],
-                    des: str2
+                    des: str2,
+                    {#url:''#}
                 });
                 option.series[0].links.push({
                     source: names[i],
                     target: authorName,
-                    name:"合作"
+                    name:"合作",
+                    color: 'green',
+                    itemStyle: {
+                                normal: {
+                                    color: 'green'
+                                }
+                            }
                 });
 
             }

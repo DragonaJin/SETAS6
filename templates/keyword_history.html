@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
 {% block header_js %}
+    <!--suppress ALL -->
     <link rel="stylesheet" href="/static/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="/static/css/components.css">
     <link rel="stylesheet" href="/static/css/jpage.css">
     <link rel="stylesheet" href="/static/plugins/morris/morris.css">
+
 {% endblock %}
 
 
@@ -16,15 +18,14 @@
             <div class="box-header with-border">
                 <h2>历年热点词分析</h2>
             </div>
-            <img src="/static/pic/p1.jpg" style="width: 60%;">
 
+            <div class="box-body">
+                <div style="height: 600px; padding: 0;padding-bottom: 100px" id="keyword_history"></div>
+            </div>
         </div>
     </div>
-
-
-
-
-
+    <input id="max_key" value="{{ max_key}}" style="display: none">
+    <input id="max_key_num" value="{{max_key_num }}" style="display: none">
 
 
 
@@ -46,4 +47,86 @@
     <script src="/static/js/table-ext.js"></script>
     <script src="/static/js/datatable.js"></script>
     <script src="/static/js/jPages.js"></script>
+    <script src="/static/js/echarts.min.js" charset="utf-8" type="text/javascript"></script>
+    <script>
+
+
+        var max_key_num = $("#max_key_num").val();
+        var max_key = $("#max_key").val();
+
+        max_key = JSON.parse(max_key);
+        max_key_num = JSON.parse(max_key_num);
+
+        showchart('keyword_history', max_key_num, max_key);   //图表执行
+          function showchart(id, max_key_num, max_key) {
+            var myChart = echarts.init(document.getElementById(id));
+            option = {
+                title: {
+                    text: '在五年内出现次数较多关键词',
+                    subtext: '（关键词数量）'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                    {#formatter:function (params) {#}
+                    {#    return max_key[0]+ params[0].seriesName+ params[0].data;#}
+                    {#}#}
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: {show: true},
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        {#boundaryGap:false,#}
+                        data:max_key,
+                        {#    ['1984-1988','1989-1993','1994-1998','1999-2003','2004-2008','2009-2013','2014-2018'],#}
+                         axisLabel: {
+                            interval:0,
+                             {#rotate:90#}
+                             {#字体旋转角度#}
+                        }
+
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        type: 'bar',
+                        data: max_key_num,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                {type: 'average', name: '平均值'}
+                            ]
+                        }
+
+                    }
+                ]
+            };
+            myChart.setOption(option);
+
+        }
+    </script>
 {% endblock %}
+
+
